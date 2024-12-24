@@ -11,7 +11,7 @@ export default function ProductsPage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:3003/products");
+        const response = await axios.get("http://localhost:4000/products");
         setProducts(response.data);
         setError(null);
       } catch (err) {
@@ -29,7 +29,7 @@ export default function ProductsPage() {
     }
 
     try {
-      await axios.post("http://localhost:3003/products", {
+      await axios.post("http://localhost:4000/products", {
         product_name: productName,
         price: parseFloat(price),
         stock: parseInt(stock),
@@ -40,7 +40,7 @@ export default function ProductsPage() {
       setStock("");
       setError(null);
 
-      const response = await axios.get("http://localhost:3003/products");
+      const response = await axios.get("http://localhost:4000/products");
       setProducts(response.data);
     } catch (err) {
       setError(err.response?.data?.error || "An error occurred while creating the product.");
@@ -48,77 +48,80 @@ export default function ProductsPage() {
   };
 
   return (
-    <div className="h-full bg-[#4B2E83] text-white flex flex-col items-center">
-      <header className="w-full bg-[#4B2E83] py-4 px-8 flex justify-center shadow-md">
-        <nav className="flex space-x-6">
-          <a href="http://localhost:3000" className="text-white bg-[#4B2E83] hover:bg-[#7A4D99] py-2 px-4 rounded-lg">
-            Users
-          </a>
-          <a href="http://localhost:3000/review" className="text-white bg-[#4B2E83] hover:bg-[#7A4D99] py-2 px-4 rounded-lg">
-            Reviews
-          </a>
-          <a href="" className="text-white bg-[#4B2E83] hover:bg-[#7A4D99] py-2 px-4 rounded-lg">
-            Products
-          </a>
-          <a href="http://localhost:3000/orders" className="text-white bg-[#4B2E83] hover:bg-[#7A4D99] py-2 px-4 rounded-lg">
-            Orders
-          </a>
-          <a href="http://localhost:3000/categories" className="text-white bg-[#4B2E83] hover:bg-[#7A4D99] py-2 px-4 rounded-lg">
-            Categories
-          </a>
+    <div className="min-h-screen bg-gray-900 text-white flex">
+      {/* Sidebar */}
+      <div className="w-1/4 bg-gray-800 p-6 shadow-lg">
+        <h2 className="text-yellow-500 text-3xl font-bold mb-8">Dashboard</h2>
+        <nav className="flex flex-col space-y-4">
+          <a href="http://localhost:3000" className="text-yellow-500 text-xl hover:text-yellow-400 transition duration-300">Users</a>
+          <a href="http://localhost:3000/review" className="text-yellow-500 text-xl hover:text-yellow-400 transition duration-300">Reviews</a>
+          <a href="" className="text-yellow-500 text-xl hover:text-yellow-400 transition duration-300">Products</a>
+          <a href="http://localhost:3000/orders" className="text-yellow-500 text-xl hover:text-yellow-400 transition duration-300">Orders</a>
+          <a href="http://localhost:3000/categories" className="text-yellow-500 text-xl hover:text-yellow-400 transition duration-300">Categories</a>
         </nav>
-      </header>
+      </div>
 
-      <div className="w-full flex mt-8 space-x-8 px-8">
-        <div className="w-1/3 bg-[#3A1F56] rounded-lg shadow-lg p-6">
-          <p className="text-2xl font-bold mb-4">Add Product</p>
-          <div className="space-y-4">
-            <input
-              type="text"
-              value={productName}
-              onChange={(e) => setProductName(e.target.value)}
-              placeholder="Enter product name"
-              className="w-full p-3 border border-[#7A4D99] rounded-lg bg-[#3A1F56] text-white focus:outline-none focus:ring-2 focus:ring-[#C1A0D6]"
-            />
-            <input
-              type="number"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              placeholder="Enter price"
-              className="w-full p-3 border border-[#7A4D99] rounded-lg bg-[#3A1F56] text-white focus:outline-none focus:ring-2 focus:ring-[#C1A0D6]"
-            />
-            <input
-              type="number"
-              value={stock}
-              onChange={(e) => setStock(e.target.value)}
-              placeholder="Enter stock quantity"
-              className="w-full p-3 border border-[#7A4D99] rounded-lg bg-[#3A1F56] text-white focus:outline-none focus:ring-2 focus:ring-[#C1A0D6]"
-            />
-            <button
-              onClick={handleCreateProduct}
-              className="w-full bg-[#7A4D99] text-white py-3 rounded-lg hover:bg-[#9B7BBF] transition duration-300"
-            >
-              Create Product
-            </button>
-          </div>
-        </div>
+      {/* Main Content */}
+      <div className="w-3/4 p-8 overflow-y-auto">
+        <div className="flex flex-col lg:flex-row gap-8">
 
-        <div className="w-2/3 bg-[#3A1F56] rounded-lg shadow-lg p-6">
-          <p className="text-2xl font-bold mb-4">Products</p>
-          {products.length === 0 ? (
-            <p className="text-gray-300">No products found. Create one above!</p>
-          ) : (
-            <div className="grid grid-cols-1 gap-4">
-              {products.map((product) => (
-                <div key={product.product_id} className="bg-[#7A4D99] rounded-lg p-4">
-                  <p>Product Name: {product.product_name}</p>
-                  <p>Price: ${product.price}</p>
-                  <p>Stock: {product.stock}</p>
-                  <p className="text-gray-400 text-sm">Created At: {product.created_at}</p>
-                </div>
-              ))}
+          {/* Create Product Form */}
+          <div className="bg-gray-800 rounded-xl w-full lg:w-1/2 p-8 shadow-2xl hover:shadow-xl transition duration-300">
+            <p className="text-3xl font-semibold text-yellow-500 mb-8 text-center">Add Product</p>
+            <div className="space-y-6">
+              <input
+                type="text"
+                value={productName}
+                onChange={(e) => setProductName(e.target.value)}
+                placeholder="Product Name"
+                className="w-full p-5 bg-gray-700 text-white border border-gray-600 rounded-xl focus:ring-2 focus:ring-yellow-500"
+              />
+              <input
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                placeholder="Price"
+                className="w-full p-5 bg-gray-700 text-white border border-gray-600 rounded-xl focus:ring-2 focus:ring-yellow-500"
+              />
+              <input
+                type="number"
+                value={stock}
+                onChange={(e) => setStock(e.target.value)}
+                placeholder="Stock Quantity"
+                className="w-full p-5 bg-gray-700 text-white border border-gray-600 rounded-xl focus:ring-2 focus:ring-yellow-500"
+              />
+              <button
+                onClick={handleCreateProduct}
+                className="w-full bg-yellow-500 text-gray-900 py-4 rounded-xl hover:bg-yellow-600 transition duration-300"
+              >
+                Create Product
+              </button>
             </div>
-          )}
+            {error && <p className="text-red-500 text-sm mt-4 text-center">{error}</p>}
+          </div>
+
+          {/* Products List */}
+          <div className="bg-gray-800 rounded-xl w-full lg:w-1/2 p-8 shadow-2xl hover:shadow-xl transition duration-300">
+            <p className="text-3xl font-semibold text-yellow-500 mb-8 text-center">Products</p>
+            {products.length === 0 ? (
+              <p className="text-gray-400 text-center">No products found. Create one above!</p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {products.map((product) => (
+                  <div
+                    key={product.product_id}
+                    className="bg-gray-700 rounded-xl p-6 shadow-lg hover:shadow-xl transition duration-300"
+                  >
+                    <p className="text-yellow-500 font-semibold">Product Name: {product.product_name}</p>
+                    <p className="text-yellow-500">Price: ${product.price}</p>
+                    <p className="text-yellow-500">Stock: {product.stock}</p>
+                    <p className="text-gray-400 text-sm mt-2">Created At: {product.created_at}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
         </div>
       </div>
     </div>
